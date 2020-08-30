@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>게시판 리스트</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <!--<link rel='stylesheet' href='./style.css' />-->
+</head>
+
+<body>
+    <div class="container">
+        <h1><%= title  %></h1>
+
+        <a href='/new' class="btn btn-primary pull-right">글쓰기</a>
+        <table class="table table-hover">
+            <tr>
+                <td>번호</td>
+                <td>작성자</td>
+                <td>제목</td>
+                <td>등록일</td>
+            </tr>
+            <%
+            for(var i=0;i<lists.length;i++){
+                var data=lists[i];
+            %>
+            <tr>
+                <td><%=data.id%></td>
+                <td><%=data.name%></td>
+                <td><a href="/read/<%=data.id%>"><%=data.title%></a></td>
+                <td><%=data.regdate%></td>
+            </tr>
+            <% } %>
+
+
+        </table>
+        <div class='text-center'>
+            <form method="post" action="/search/1" class="form-inline">
+                <select name="sel" class="form-control">
+                    <option value="title">title</option>
+                    <option value="content">content</option>
+                </select>
+                <input type="text" name="txt" class="form-control">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
+
+        <ul class="pager">
+            <%
+        var curSet = pasing.curSet
+        var endPage = pasing.endPage
+        var startPage = pasing.startPage
+        var totalSet = pasing.totalSet
+        var totalPage = pasing.totalPage
+        var page_list_size = pasing.page_list_size
+        var page_size = pasing.page_size
+        var curPage = pasing.curPage
+    %>
+
+            <%
+        if(curSet>1){
+    %>
+
+            <li value=(startPage-1) class="previous">
+                <a href='/list/<%= (startPage-1) %>' 이전페이지</a> </li> <%
+        }
+    %> <%
+        for(var i = startPage; i <= endPage; i++){
+        if(i > totalPage){break;}
+
+        if(i == curPage){
+    %> <li value=<%= i %> class=''>
+                    <a href='/list/<%= i %>'>
+                        <%= i %>
+                    </a>
+            </li>
+
+            <%
+        }else{
+    %>
+            <li value=<%= i %> class='active'>
+                <a href='/list/<%= i %>'>
+                    <%= i %>
+                </a>
+            </li>
+
+
+            <%
+        }
+        %>
+
+            <%
+    }
+    %>
+
+            <%
+            if(curSet < totalSet){
+        %>
+            <li value=( endPage + 1) class="next">
+                <a href='/list/<%= ( endPage + 1) %>'>다음페이지</a>
+            </li>
+            <%
+        }
+        %>
+        </ul>
+    </div>
+</body>
+
+</html>
